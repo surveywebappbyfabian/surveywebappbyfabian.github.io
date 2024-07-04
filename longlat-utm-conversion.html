@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Long/Lat ⇄ UTM Conversion - Survey App</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .conversion-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: calc(100% - 16px);
+            padding: 8px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .button, button {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            background-image: linear-gradient(to bottom, #3498db, #2980b9);
+        }
+        .button:hover, button:hover {
+            background-image: linear-gradient(to bottom, #2980b9, #236fa1);
+        }
+        .result {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #e8f4fd;
+            border-radius: 4px;
+        }
+        .center-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Long/Lat ⇄ UTM Conversion</h1>
+        <div class="conversion-section">
+            <h2>Longitude/Latitude to UTM</h2>
+            <div class="input-group">
+                <label for="longitude">Longitude:</label>
+                <input type="number" id="longitude" step="any" placeholder="Enter longitude">
+            </div>
+            <div class="input-group">
+                <label for="latitude">Latitude:</label>
+                <input type="number" id="latitude" step="any" placeholder="Enter latitude">
+            </div>
+            <div class="center-button">
+                <button onclick="convertToUTM()">Convert to UTM</button>
+            </div>
+            <div id="utmResult" class="result"></div>
+        </div>
+        <div class="conversion-section">
+            <h2>UTM to Longitude/Latitude</h2>
+            <div class="input-group">
+                <label for="easting">Easting:</label>
+                <input type="number" id="easting" step="any" placeholder="Enter easting">
+            </div>
+            <div class="input-group">
+                <label for="northing">Northing:</label>
+                <input type="number" id="northing" step="any" placeholder="Enter northing">
+            </div>
+            <div class="input-group">
+                <label for="zone">UTM Zone:</label>
+                <input type="number" id="zone" min="1" max="60" placeholder="Enter zone">
+            </div>
+            <div class="input-group">
+                <label for="hemisphere">Hemisphere:</label>
+                <select id="hemisphere">
+                    <option value="N">Northern</option>
+                    <option value="S">Southern</option>
+                </select>
+            </div>
+            <div class="center-button">
+                <button onclick="convertToLongLat()">Convert to Long/Lat</button>
+            </div>
+            <div id="longLatResult" class="result"></div>
+        </div>
+        <div class="center-button">
+            <a href="index.html" class="button">Back to Home</a>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
