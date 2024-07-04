@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DD ⇄ DMS Conversion - Survey App</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .conversion-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: calc(100% - 16px);
+            padding: 8px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .button, button {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            background-image: linear-gradient(to bottom, #3498db, #2980b9);
+        }
+        .button:hover, button:hover {
+            background-image: linear-gradient(to bottom, #2980b9, #236fa1);
+        }
+        .result {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #e8f4fd;
+            border-radius: 4px;
+        }
+        .center-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DD ⇄ DMS Conversion</h1>
+        <div class="conversion-section">
+            <h2>Decimal Degrees to DMS</h2>
+            <div class="input-group">
+                <label for="decimalDegrees">Decimal Degrees:</label>
+                <input type="number" id="decimalDegrees" step="any" placeholder="Enter decimal degrees">
+            </div>
+            <div class="center-button">
+                <button onclick="convertToDMS()">Convert to DMS</button>
+            </div>
+            <div id="dmsResult" class="result"></div>
+        </div>
+        <div class="conversion-section">
+            <h2>DMS to Decimal Degrees</h2>
+            <div class="input-group">
+                <label for="degrees">Degrees:</label>
+                <input type="number" id="degrees" placeholder="Degrees">
+            </div>
+            <div class="input-group">
+                <label for="minutes">Minutes:</label>
+                <input type="number" id="minutes" placeholder="Minutes">
+            </div>
+            <div class="input-group">
+                <label for="seconds">Seconds:</label>
+                <input type="number" id="seconds" step="any" placeholder="Seconds">
+            </div>
+            <div class="input-group">
+                <label for="direction">Direction:</label>
+                <select id="direction">
+                    <option value="1">N/E</option>
+                    <option value="-1">S/W</option>
+                </select>
+            </div>
+            <div class="center-button">
+                <button onclick="convertToDD()">Convert to DD</button>
+            </div>
+            <div id="ddResult" class="result"></div>
+        </div>
+        <div class="center-button">
+            <a href="index.html" class="button">Back to Home</a>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
