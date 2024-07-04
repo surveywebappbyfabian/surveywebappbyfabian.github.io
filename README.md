@@ -56,15 +56,11 @@ Convert between decimal degrees and degrees, minutes, seconds formats.
 
 Contributions, issues, and feature requests are welcome. Feel free to check [issues page](link-to-issues-page) if you want to contribute.
 
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
 
 ## Author
 
-Your Name - [Your Website](your-website-url)
+Fabian Wambua - (https://github.com/Wambua-F)
 
 ## Acknowledgments
 
-- List any references or resources you used
-- Credit any third-party libraries or tools
+Resource: https://www.unsw.edu.au/content/dam/pdfs/engineering/civil-environmental/research-reports/civil-eng-and-enviro-research-areas-surveying/2021-09-Surveying_Computations_TextbookJan2019.pdf
