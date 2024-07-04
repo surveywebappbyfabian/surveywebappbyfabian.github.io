@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DD ⇄ DMS Conversion - Survey App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>DD ⇄ DMS Conversion</h1>
+        <div class="conversion-section">
+            <h2>Decimal Degrees to DMS</h2>
+            <div class="input-group">
+                <label for="decimalDegrees">Decimal Degrees:</label>
+                <input type="number" id="decimalDegrees" step="any" placeholder="Enter decimal degrees">
+            </div>
+            <button onclick="convertToDMS()">Convert to DMS</button>
+            <div id="dmsResult" class="result"></div>
+        </div>
+        <div class="conversion-section">
+            <h2>DMS to Decimal Degrees</h2>
+            <div class="input-group">
+                <label for="degrees">Degrees:</label>
+                <input type="number" id="degrees" placeholder="Degrees">
+            </div>
+            <div class="input-group">
+                <label for="minutes">Minutes:</label>
+                <input type="number" id="minutes" placeholder="Minutes">
+            </div>
+            <div class="input-group">
+                <label for="seconds">Seconds:</label>
+                <input type="number" id="seconds" step="any" placeholder="Seconds">
+            </div>
+            <div class="input-group">
+                <label for="direction">Direction:</label>
+                <select id="direction">
+                    <option value="1">N/E</option>
+                    <option value="-1">S/W</option>
+                </select>
+            </div>
+            <button onclick="convertToDD()">Convert to DD</button>
+            <div id="ddResult" class="result"></div>
+        </div>
+        <a href="index.html" class="button">Back to Home</a>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
