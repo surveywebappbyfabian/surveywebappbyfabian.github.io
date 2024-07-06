@@ -100,33 +100,171 @@ function calculateResection() {
     const pointC = getPointCoordinates('C');
 
     // Get measured angles
-    const angleBAC = parseFloat(document.getElementById('angleBAC').value) * Math.PI / 180;
-    const angleABC = parseFloat(document.getElementById('angleABC').value) * Math.PI / 180;
+    const angleBAP = parseFloat(document.getElementById('angleBAP').value) * Math.PI / 180;
+    const angleCBP = parseFloat(document.getElementById('angleCBP').value) * Math.PI / 180;
+    const angleACP = parseFloat(document.getElementById('angleACP').value) * Math.PI / 180;
 
-    if (!pointA || !pointB || !pointC || isNaN(angleBAC) || isNaN(angleABC)) {
+    if (!pointA || !pointB || !pointC || isNaN(angleBAP) || isNaN(angleCBP) || isNaN(angleACP)) {
         displayResults("Error: Please enter all required data.");
         return;
     }
 
-    // Calculate using the resection formula
-    const cotA = 1 / Math.tan(angleBAC);
-    const cotB = 1 / Math.tan(angleABC);
+    // Calculate weights
+    const wA = Math.sin(angleBAP) * Math.sin(angleACP);
+    const wB = Math.sin(angleCBP) * Math.sin(angleBAP);
+    const wC = Math.sin(angleACP) * Math.sin(angleCBP);
 
-    const numeratorE = (pointA.northing - pointC.northing) + cotA * (pointC.easting - pointA.easting) + cotB * (pointB.easting - pointC.easting);
-    const numeratorN = (pointC.easting - pointA.easting) + cotA * (pointA.northing - pointC.northing) + cotB * (pointC.northing - pointB.northing);
-    const denominator = cotA + cotB;
+    // Calculate total weight
+    const wTotal = wA + wB + wC;
 
-    const eastingP = pointC.easting + numeratorE / denominator;
-    const northingP = pointC.northing + numeratorN / denominator;
+    // Calculate coordinates of point P using Tienstra formula
+    const eastingP = (wA * pointA.easting + wB * pointB.easting + wC * pointC.easting) / wTotal;
+    const northingP = (wA * pointA.northing + wB * pointB.northing + wC * pointC.northing) / wTotal;
+
+    // Calculate distances
+    const distanceAP = calculateDistance(pointA, {easting: eastingP, northing: northingP});
+    const distanceBP = calculateDistance(pointB, {easting: eastingP, northing: northingP});
+    const distanceCP = calculateDistance(pointC, {easting: eastingP, northing: northingP});
+    const distanceAB = calculateDistance(pointA, pointB);
+    const distanceBC = calculateDistance(pointB, pointC);
+    const distanceCA = calculateDistance(pointC, pointA);
+
+    // Calculate bearings
+    const bearingAP = calculateBearing(pointA, {easting: eastingP, northing: northingP});
+    const bearingBP = calculateBearing(pointB, {easting: eastingP, northing: northingP});
+    const bearingCP = calculateBearing(pointC, {easting: eastingP, northing: northingP});
+    const bearingAB = calculateBearing(pointA, pointB);
+    const bearingBC = calculateBearing(pointB, pointC);
+    const bearingCA = calculateBearing(pointC, pointA);
+
+    // Calculate angles
+    const angleBAC = Math.acos((Math.pow(distanceAB, 2) + Math.pow(distanceCA, 2) - Math.pow(distanceBC, 2)) / (2 * distanceAB * distanceCA));
+    const angleCBA = Math.acos((Math.pow(distanceBC, 2) + Math.pow(distanceAB, 2) - Math.pow(distanceCA, 2)) / (2 * distanceBC * distanceAB));
+    const angleACB = Math.acos((Math.pow(distanceCA, 2) + Math.pow(distanceBC, 2) - Math.pow(distanceAB, 2)) / (2 * distanceCA * distanceBC));
 
     displayResults(`
-        Resection Results:
+        Resection Results (Tienstra Method):
         Point P (Unknown Point):
         Easting: ${eastingP.toFixed(3)}
         Northing: ${northingP.toFixed(3)}
+
+        Distances:
+        AP: ${distanceAP.toFixed(3)} m
+        BP: ${distanceBP.toFixed(3)} m
+        CP: ${distanceCP.toFixed(3)} m
+        AB: ${distanceAB.toFixed(3)} m
+        BC: ${distanceBC.toFixed(3)} m
+        CA: ${distanceCA.toFixed(3)} m
+
+        Bearings:
+        AP: ${bearingAP.toFixed(4)}°
+        BP: ${bearingBP.toFixed(4)}°
+        CP: ${bearingCP.toFixed(4)}°
+        AB: ${bearingAB.toFixed(4)}°
+        BC: ${bearingBC.toFixed(4)}°
+        CA: ${bearingCA.toFixed(4)}°
+
+        Angles:
+        BAC: ${(angleBAC * 180 / Math.PI).toFixed(4)}°
+        CBA: ${(angleCBA * 180 / Math.PI).toFixed(4)}°
+        ACB: ${(angleACB * 180 / Math.PI).toFixed(4)}°
+        BAP: ${(angleBAP * 180 / Math.PI).toFixed(4)}°
+        CBP: ${(angleCBP * 180 / Math.PI).toFixed(4)}°
+        ACP: ${(angleACP * 180 / Math.PI).toFixed(4)}°
     `);
+
+    drawDiagram(pointA, pointB, pointC, {easting: eastingP, northing: northingP});
 }
 
+function calculateDistance(point1, point2) {
+    const dx = point2.easting - point1.easting;
+    const dy = point2.northing - point1.northing;
+    return Math.sqrt(dx * dx + dy * dy);
+}
+
+function calculateBearing(point1, point2) {
+    const dx = point2.easting - point1.easting;
+    const dy = point2.northing - point1.northing;
+    let bearing = Math.atan2(dx, dy) * 180 / Math.PI;
+    if (bearing < 0) {
+        bearing += 360;
+    }
+    return bearing;
+}
+
+function drawDiagram(pointA, pointB, pointC, pointP) {
+    const canvas = document.getElementById('resectionCanvas');
+    const ctx = canvas.getContext('2d');
+    const padding = 50;
+    const scale = calculateScale(pointA, pointB, pointC, pointP, canvas.width - 2*padding, canvas.height - 2*padding);
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.font = '12px Arial';
+
+    // Draw points
+    drawPoint(ctx, pointA, 'A', scale, padding);
+    drawPoint(ctx, pointB, 'B', scale, padding);
+    drawPoint(ctx, pointC, 'C', scale, padding);
+    drawPoint(ctx, pointP, 'P', scale, padding);
+
+    // Draw lines
+    drawLine(ctx, pointA, pointB, scale, padding);
+    drawLine(ctx, pointB, pointC, scale, padding);
+    drawLine(ctx, pointC, pointA, scale, padding);
+    drawLine(ctx, pointA, pointP, scale, padding);
+    drawLine(ctx, pointB, pointP, scale, padding);
+    drawLine(ctx, pointC, pointP, scale, padding);
+
+    // Draw angles
+    drawAngle(ctx, pointB, pointA, pointP, 'BAP', scale, padding);
+    drawAngle(ctx, pointC, pointB, pointP, 'CBP', scale, padding);
+    drawAngle(ctx, pointA, pointC, pointP, 'ACP', scale, padding);
+}
+
+function drawPoint(ctx, point, label, scale, padding) {
+    const x = padding + (point.easting - minEasting) * scale;
+    const y = ctx.canvas.height - padding - (point.northing - minNorthing) * scale;
+    ctx.beginPath();
+    ctx.arc(x, y, 3, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.fillText(label, x + 5, y - 5);
+}
+
+function drawLine(ctx, point1, point2, scale, padding) {
+    const x1 = padding + (point1.easting - minEasting) * scale;
+    const y1 = ctx.canvas.height - padding - (point1.northing - minNorthing) * scale;
+    const x2 = padding + (point2.easting - minEasting) * scale;
+    const y2 = ctx.canvas.height - padding - (point2.northing - minNorthing) * scale;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+}
+
+function drawAngle(ctx, point1, point2, point3, label, scale, padding) {
+    const x2 = padding + (point2.easting - minEasting) * scale;
+    const y2 = ctx.canvas.height - padding - (point2.northing - minNorthing) * scale;
+    const angle1 = Math.atan2(point1.northing - point2.northing, point1.easting - point2.easting);
+    const angle2 = Math.atan2(point3.northing - point2.northing, point3.easting - point2.easting);
+    const radius = 20;
+    ctx.beginPath();
+    ctx.arc(x2, y2, radius, -angle1, -angle2);
+    ctx.stroke();
+    const labelAngle = (angle1 + angle2) / 2;
+    ctx.fillText(label, x2 + (radius + 5) * Math.cos(-labelAngle), y2 - (radius + 5) * Math.sin(-labelAngle));
+}
+
+function calculateScale(pointA, pointB, pointC, pointP, width, height) {
+    minEasting = Math.min(pointA.easting, pointB.easting, pointC.easting, pointP.easting);
+    maxEasting = Math.max(pointA.easting, pointB.easting, pointC.easting, pointP.easting);
+    minNorthing = Math.min(pointA.northing, pointB.northing, pointC.northing, pointP.northing);
+    maxNorthing = Math.max(pointA.northing, pointB.northing, pointC.northing, pointP.northing);
+    const scaleX = width / (maxEasting - minEasting);
+    const scaleY = height / (maxNorthing - minNorthing);
+    return Math.min(scaleX, scaleY);
+}
+
+// Keep the existing getPointCoordinates and displayResults functions
 function getPointCoordinates(pointName) {
     const inputs = document.querySelectorAll(`.known-point input[placeholder^="Point ${pointName}"], .known-point input[placeholder$=" ${pointName}"]`);
     if (inputs.length === 3) {
