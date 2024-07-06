@@ -44,13 +44,13 @@
             margin-bottom: 5px;
             font-weight: bold;
         }
-        .button, button {
+        button, .button {
             display: inline-block;
             background-color: #3498db;
             color: white;
             border: none;
             padding: 10px 20px;
-            margin: 10px 5px;
+            margin: 10px 0;
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
@@ -58,7 +58,7 @@
             transition: background-color 0.3s;
             background-image: linear-gradient(to bottom, #3498db, #2980b9);
         }
-        .button:hover, button:hover {
+        button:hover, .button:hover {
             background-image: linear-gradient(to bottom, #2980b9, #236fa1);
         }
         #results {
@@ -70,6 +70,12 @@
         .center-button {
             text-align: center;
             margin-top: 20px;
+        }
+        canvas {
+            display: block;
+            margin: 20px auto;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
         }
     </style>
 </head>
@@ -97,18 +103,23 @@
         <div id="measured-angles-container">
             <h2>Measured Angles</h2>
             <div class="measured-angle">
-                <label>Angle BAC:</label>
-                <input type="number" id="angleBAC" step="0.001" placeholder="Degrees">
+                <label>Angle BAP:</label>
+                <input type="number" id="angleBAP" step="0.001" placeholder="Degrees">
             </div>
             <div class="measured-angle">
-                <label>Angle ABC:</label>
-                <input type="number" id="angleABC" step="0.001" placeholder="Degrees">
+                <label>Angle CBP:</label>
+                <input type="number" id="angleCBP" step="0.001" placeholder="Degrees">
+            </div>
+            <div class="measured-angle">
+                <label>Angle ACP:</label>
+                <input type="number" id="angleACP" step="0.001" placeholder="Degrees">
             </div>
         </div>
         <div class="center-button">
             <button onclick="calculateResection()">Calculate Resection</button>
         </div>
         <div id="results"></div>
+        <canvas id="resectionCanvas" width="500" height="500"></canvas>
         <div class="center-button">
             <a href="index.html" class="button">Back to Home</a>
         </div>
