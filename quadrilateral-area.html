@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quadrilateral Area Calculation - Survey App</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        #quadrilateral-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .side-input {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        input {
+            width: calc(50% - 10px);
+            padding: 8px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button, .button {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px 5px 10px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            background-image: linear-gradient(to bottom, #3498db, #2980b9);
+        }
+        button:hover, .button:hover {
+            background-image: linear-gradient(to bottom, #2980b9, #236fa1);
+        }
+        #results {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #e8f4fd;
+            border-radius: 4px;
+        }
+        .center-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quadrilateral Area Calculation</h1>
+        <div id="quadrilateral-container">
+            <div class="side-input">
+                <input type="number" id="side1" step="0.001" placeholder="Side 1">
+                <input type="number" id="side2" step="0.001" placeholder="Side 2">
+            </div>
+            <div class="side-input">
+                <input type="number" id="side3" step="0.001" placeholder="Side 3">
+                <input type="number" id="side4" step="0.001" placeholder="Side 4">
+            </div>
+        </div>
+        <button onclick="calculateArea()">Calculate Area</button>
+        <div id="results"></div>
+        <div class="center-button">
+            <a href="index.html" class="button">Back to Home</a>
+        </div>
+    </div>
+    <script>
+        function calculateArea() {
+            const side1 = parseFloat(document.getElementById('side1').value);
+            const side2 = parseFloat(document.getElementById('side2').value);
+            const side3 = parseFloat(document.getElementById('side3').value);
+            const side4 = parseFloat(document.getElementById('side4').value);
+
+            if (isNaN(side1) || isNaN(side2) || isNaN(side3) || isNaN(side4)) {
+                document.getElementById('results').textContent = "Please enter valid numbers for all sides.";
+                return;
+            }
+
+            const s = (side1 + side2 + side3 + side4) / 2;
+            const area = Math.sqrt(
+                (s - side1) * (s - side2) * (s - side3) * (s - side4)
+            );
+
+            document.getElementById('results').textContent = `The area of the quadrilateral is approximately ${area.toFixed(3)} square units.`;
+        }
+    </script>
+</body>
+</html>
