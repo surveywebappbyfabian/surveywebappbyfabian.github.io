@@ -15,7 +15,7 @@ This app includes the following computations and conversions:
 5. Area Calculation
 6. Long/Lat ⇄ UTM Conversion
 7. DD ⇄ DMS Conversion
-
+8. Quadrilateral Area
 ## Usage
 
 Each computation/conversion has its own dedicated page with intuitive input fields and clear instructions.
@@ -40,6 +40,13 @@ Convert between geographic (longitude/latitude) and UTM (Universal Transverse Me
 
 ### DD ⇄ DMS Conversion
 Convert between decimal degrees and degrees, minutes, seconds formats.
+
+### Quadrilateral Area
+Here, Brahmagupta’s formula is used to calculate the area of a cyclic quadrilateral (a quadrilateral where all vertices lie on a single circle). The formula is:
+Area=sqrt[(s−a)(s−b)(s−c)(s−d)]
+where ( s ) is the semiperimeter of the quadrilateral, calculated as:
+s=(a+b+c+d​)/2
+Here, ( a ), ( b ), ( c ), and ( d ) are the lengths of the sides of the quadrilateral.
 
 ## Installation
 
